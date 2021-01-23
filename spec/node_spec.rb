@@ -21,4 +21,29 @@ RSpec.describe Node do
       end
     end
   end
+
+  context "comparisons between two Node objects" do 
+    context "=="
+      it 'returns true if the two nodes have the same value' do 
+        node_1 = Node.new(value: 5)
+        node_2 = Node.new(value: 5)
+        expect(node_1 == node_2).to be true
+      end
+
+    context ">" do
+      it 'returns true if the first node has a higher value' do 
+        node_1 = Node.new(value: 9)
+        node_2 = Node.new(value: 5)
+        expect(node_1 > node_2).to be true
+      end
+    end
+
+    context "<" do 
+      it 'returns true if the first node has a lower value' do 
+        node_1 = Node.new(value: 4)
+        node_2 = Node.new(value: 5)
+        expect(node_1 < node_2).to be true
+      end
+    end
+  end
 end
