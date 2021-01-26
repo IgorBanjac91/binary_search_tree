@@ -173,6 +173,24 @@ class Tree
     value > root.value ? depth(value, root.right, count += 1 ) : depth(value, root.left, count += 1)
   end
 
+  def balanced?(root = @root)
+    unless root.left.nil? && root.right.nil?
+      return false unless (height(root.left.value) - height(root.right.value)).abs <= 1
+      if root.right.nil? && root.left
+        balanced?(root.left)
+      end
+      if root.left.nil? && root.right
+        balanced?(root.right)
+      end
+    end
+    return true
+  end
+
+  def rebalance
+    lev_ord_arr = level_order
+    @root = build_tree(lev_ord_arr)
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
@@ -180,19 +198,37 @@ class Tree
   end
 end
 
-tree = Tree.new([1, 2, 3, 4, 5, 6, 7, 8, 9])
 
+new_tree = Tree.new(Array.new(15) { rand(1..100) })
 
 puts "-----------------------\n\n\n"
-tree.pretty_print
+new_tree.pretty_print
 puts "\n\n-----------------------"
 
+p new_tree.balanced?
 
-p tree.depth(10)
+p "Level order:  #{new_tree.level_order}"
+p "Pre-order:    #{new_tree.preorder}"
+p "Post-order:   #{new_tree.postorder}"
+p "In-order:     #{new_tree.inorder}"
 
+new_tree.insert(111)
+new_tree.insert(112)
+new_tree.insert(113)
+new_tree.insert(114)
+new_tree.insert(115)
 
-# tree_1 = Tree.new([1, 2, 3, 4, 6, 7, 8, 9])
+p new_tree.balanced?
 
-# puts "-----------------------\n\n\n"
-# tree_1.pretty_print
-# puts "\n\n-----------------------"
+new_tree.rebalance
+
+p new_tree.balanced?
+
+p "Level order:  #{new_tree.level_order}"
+p "Pre-order:    #{new_tree.preorder}"
+p "Post-order:   #{new_tree.postorder}"
+p "In-order:     #{new_tree.inorder}"
+
+puts "-----------------------\n\n\n"
+new_tree.pretty_print
+puts "\n\n-----------------------"

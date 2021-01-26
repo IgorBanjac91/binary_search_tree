@@ -98,4 +98,18 @@ RSpec.describe Tree do
       expect(tree.depth(22)).to eq("No node found with the given value 22")
     end
   end
+
+  describe '#balanced?' do
+    it 'returns true if the tree is balanced' do 
+      expect(tree.balanced?).to be true
+    end
+
+    it 'returns false if the tree is unbalanced' do 
+      tree.insert(10)
+      tree.insert(11)
+      tree.insert(12)
+      tree.insert(13)
+      expect(tree.balanced?).to be false
+    end
+  end
 end
