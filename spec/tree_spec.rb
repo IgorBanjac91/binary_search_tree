@@ -87,11 +87,15 @@ RSpec.describe Tree do
     end
     
     it 'returns the depth that is the same as the height of the farest leaf' do 
-      expect(tree.depth(4)).to eq(tree.heihgt(5))
+      expect(tree.depth(4)).to eq(tree.height(5))
     end
     
     it 'returns the depth of a middle node' do 
       expect(tree.depth(3)).to eq(2)
+    end
+
+    it 'returns string that says that there is no elment in the binary tree' do
+      expect(tree.depth(22)).to eq("No node found with the given value 22")
     end
   end
 end

@@ -93,10 +93,10 @@ class Tree
   def find(value, root = @root)
     return root if root.value == value
     if value > root.value
-      return "No node found with the give value #{value}" if root.right.nil?
+      return "No node found with the given value #{value}" if root.right.nil?
       find(value, root.right)
     else
-      return "No node found with the give value #{value}" if root.left.nil?
+      return "No node found with the given value #{value}" if root.left.nil?
       find(value, root.left)
     end
   end
@@ -167,6 +167,11 @@ class Tree
     end
   end
 
+  def depth(value, root = @root, count = 0)
+    return find(value) unless find(value).instance_of? Node
+    return count if root.value == value
+    value > root.value ? depth(value, root.right, count += 1 ) : depth(value, root.left, count += 1)
+  end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
@@ -183,7 +188,7 @@ tree.pretty_print
 puts "\n\n-----------------------"
 
 
-p tree.height(9)
+p tree.depth(10)
 
 
 # tree_1 = Tree.new([1, 2, 3, 4, 6, 7, 8, 9])
