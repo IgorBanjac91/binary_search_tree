@@ -29,7 +29,7 @@ class Tree
             cont = root
             subs = root
           else
-            node_to_remove = root.right   #later do the case when the elm is = to the root
+            node_to_remove = root.right
             cont = root.right
             subs = root.right
           end
@@ -41,12 +41,8 @@ class Tree
               cont = cont.right
             end
           end 
-          p node_to_remove.value
-          p cont.value
           node_to_remove.value = cont.value
-          p subs.right.value 
           until subs.right.value == elm
-            p subs.right.left
             if subs.right.left.value == cont.value
               subs.right.left = nil
               return
@@ -80,9 +76,97 @@ class Tree
     end
   end
 
-  def insert
-
+  def insert(value, root = @root)
+    if value > root.value
+      if root.right.nil?
+        return root.right = Node.new(value: value)
+      end
+      insert(value, root.right)
+    else
+      if root.left.nil?
+        return root.left = Node.new(value: value)
+      end
+      insert(value, root.left)
+    end
   end
+
+  def find(value, root = @root)
+    return root if root.value == value
+    if value > root.value
+      return "No node found with the give value #{value}" if root.right.nil?
+      find(value, root.right)
+    else
+      return "No node found with the give value #{value}" if root.left.nil?
+      find(value, root.left)
+    end
+  end
+
+  def level_order(root = @root, arr = [], queue = [@root])
+    until queue.empty?
+      root = queue.shift
+      arr << root.value
+      unless root.left.nil?
+        queue << root.left
+      end
+      unless root.right.nil?
+        queue << root.right
+      end
+    end
+    arr 
+  end
+
+  def preorder(root = @root, arr = [])
+    arr << root.value
+    if root.left.nil?
+      if root.right
+        preorder(root.right, arr)
+      end
+      return arr
+    end
+    preorder(root.left, arr)
+    preorder(root.right, arr)
+  end
+
+  def inorder(root = @root, arr = [])
+    if root.left.nil?
+      arr << root.value
+      if root.right
+        inorder(root.right, arr)
+      end
+      return arr
+    end
+    inorder(root.left, arr)
+    arr << root.value
+    inorder(root.right, arr)
+  end
+
+  def postorder(root = @root, arr = [])
+    if root.left.nil?
+      if root.right
+        postorder(root.right, arr)
+      end
+      return arr << root.value
+    end
+    postorder(root.left, arr)
+    postorder(root.right, arr)
+    arr << root.value
+  end
+
+  def height(value, count = 0)
+    node = find(value)
+    if node.left.nil? && node.right.nil?
+      return count 
+    end
+    if node.right.nil?
+      height(node.left.value, count += 1)
+    elsif node.left.nil?
+      height(node.right.value, count += 1)
+    else 
+      count += 1
+      [height(node.left.value, count), height(node.right.value, count)].max
+    end
+  end
+
 
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
@@ -93,15 +177,17 @@ end
 
 tree = Tree.new([1, 2, 3, 4, 5, 6, 7, 8, 9])
 
-tree.delete(5)
 
 puts "-----------------------\n\n\n"
 tree.pretty_print
 puts "\n\n-----------------------"
 
 
-tree_1 = Tree.new([1, 2, 3, 4, 6, 7, 8, 9])
+p tree.height(9)
 
-puts "-----------------------\n\n\n"
-tree_1.pretty_print
-puts "\n\n-----------------------"
+
+# tree_1 = Tree.new([1, 2, 3, 4, 6, 7, 8, 9])
+
+# puts "-----------------------\n\n\n"
+# tree_1.pretty_print
+# puts "\n\n-----------------------"
